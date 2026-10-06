@@ -86,16 +86,21 @@ fun MisRutasScreen() {
             nPrecio == null || nPrecio < 0 ->
                 error = "Ingresa un precio válido"
             else -> {
+                // Copio los valores ANTES de limpiar el formulario,
+                // porque la corrutina se ejecuta después de limpiar()
                 val editando = rutaEditando
+                val o = origen.trim()
+                val d = destino.trim()
+                val h = hora.trim()
                 scope.launch {
                     if (editando == null) {
                         // CREATE
-                        dao.insert(Ruta(origen = origen.trim(), destino = destino.trim(),
-                            horaSalida = hora.trim(), asientos = nAsientos, precio = nPrecio))
+                        dao.insert(Ruta(origen = o, destino = d,
+                            horaSalida = h, asientos = nAsientos, precio = nPrecio))
                     } else {
                         // UPDATE: se conserva el mismo id
-                        dao.update(editando.copy(origen = origen.trim(), destino = destino.trim(),
-                            horaSalida = hora.trim(), asientos = nAsientos, precio = nPrecio))
+                        dao.update(editando.copy(origen = o, destino = d,
+                            horaSalida = h, asientos = nAsientos, precio = nPrecio))
                     }
                 }
                 limpiar()
